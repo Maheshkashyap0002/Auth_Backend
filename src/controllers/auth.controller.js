@@ -7,19 +7,19 @@ async function registerUser(req , res){
 
   const { username , email , password} = req.body ;
 
-  const user = await userModel.create({
-    username, email, password
-  })
-
   const isUserAlreadyExits = await userModel.findOne({
     email
   })
 
-  if(!isUserAlreadyExits){
+  if(isUserAlreadyExits){
   return res.status(409).json({
       message: "User Already exits"
     })
   }
+
+  const user = await userModel.create({
+    username, email, password
+  }) 
 
   const token = jwt.sign({
     id: user._id
